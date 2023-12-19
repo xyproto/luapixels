@@ -1,24 +1,18 @@
-window_title = "Pixel McPixelface"
+window_title = "Simple Example"
 
 function at_start()
     print("hi")
 end
 
 function at_every_frame()
+    -- Set the background color to blue (RGB 0, 128, 255)
     background(0, 128, 255)
-    for y = 0, 199 do
-        for x = 0, 255 do
-            plot(x, y, x)
-        end
-        for x = 256, 318 do
-            plot(x, y, 50)
-        end
-        plot(319, y, 70)
-    end
-    plot(319, 199, 41)
-    plot(319, 199, 41)
-    plot(319, 199, 41)
-    plot(319, 199, 41)
+    -- At (100, 100), draw a red pixel (index 41 in the VGA palette)
+    plot(100, 100, 41)
+end
+
+function at_keypress()
+    quit()
 end
 
 function at_end()

@@ -12,7 +12,7 @@ import (
 var luaCode string
 
 func main() {
-	if err := luapixels.RunCode(luaCode); err != nil {
+	if err := luapixels.Run(luaCode); err != nil {
 		log.Fatalln(err)
 	}
 }

@@ -1,4 +1,4 @@
-window_title = "Pixel McPixelface"
+window_title = "Double Jump"
 
 player_x = 100
 player_y = 100
@@ -16,7 +16,7 @@ right_pressed = false
 space_pressed = false
 
 function at_start()
-    print("hi")
+    print("Double Jump")
 end
 
 function at_every_tick()

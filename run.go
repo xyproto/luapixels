@@ -5,31 +5,49 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 
+	"github.com/fzipp/vga"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	lua "github.com/yuin/gopher-lua"
 )
 
 var shouldQuit = false
 
-// Run is for running luapixel Lua code, given as a filename
-func Run(luaFilename string) error {
-	data, err := os.ReadFile(luaFilename)
+// Run is for running luapixel Lua code, given as a string
+func Run(luaCode string) error {
+	runtime.LockOSThread()
+
+	// Initialize GLFW
+	if err := glfw.Init(); err != nil {
+		return fmt.Errorf("failed to initialize GLFW: %v", err)
+	}
+	defer glfw.Terminate() // Ensure GLFW is terminated when function exits
+
+	// Create the GLFW window here (or ensure it's created before this function is called)
+	window, err := glfw.CreateWindow(windowWidth, windowHeight, "Initial Title", nil, nil)
 	if err != nil {
+		return fmt.Errorf("failed to create GLFW window: %v", err)
+	}
+
+	glfw.WindowHint(glfw.Resizable, glfw.False)
+
+	if err := InitGL(window); err != nil {
 		return err
 	}
-	return RunCode(string(data))
-}
 
-// RunCode is for running luapixel Lua code, given as a string
-func RunCode(luaCode string) error {
-	runtime.LockOSThread()
+	palette = vga.DefaultPalette
 
 	L := lua.NewState()
 	defer L.Close()
 
-	if err := L.DoString(luaCode); err != nil {
+	L.SetGlobal("set_pal", L.NewFunction(setPalette))
+	L.SetGlobal("plot", L.NewFunction(plotPixel))
+	L.SetGlobal("background", L.NewFunction(drawBackground))
+	L.SetGlobal("quit", L.NewFunction(quit))
+
+	if err := L.DoString(strings.TrimSpace(luaCode)); err != nil {
 		fmt.Fprintf(os.Stderr, "Error executing Lua code: %s\n", err)
 		return err
 	}
@@ -39,8 +57,7 @@ func RunCode(luaCode string) error {
 		return errors.New("Lua code must declare a top level windowTitle variable")
 	}
 
-	window := initGraphics(windowTitle)
-	defer glfw.Terminate()
+	window.SetTitle(windowTitle)
 
 	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		L.SetGlobal("last_key", lua.LNumber(key))
@@ -74,4 +91,13 @@ func RunCode(luaCode string) error {
 
 	CallLuaFunction(L, "at_end")
 	return nil
+}
+
+// RunFile is for running luapixel Lua code, given a filename
+func RunFile(luaFilename string) error {
+	data, err := os.ReadFile(luaFilename)
+	if err != nil {
+		return err
+	}
+	return Run(string(data))
 }

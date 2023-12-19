@@ -3,7 +3,6 @@ package luapixels
 import (
 	"image/color"
 
-	"github.com/fzipp/vga"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
@@ -17,27 +16,12 @@ const (
 	paletteSize  = 256
 )
 
-var (
-	palette []color.Color
-)
+var palette []color.Color
 
-// Initialize GLFW and OpenGL
-func initGraphics(windowTitle string) *glfw.Window {
-	palette = vga.DefaultPalette
-
-	if err := glfw.Init(); err != nil {
-		panic(err)
-	}
-
-	glfw.WindowHint(glfw.Resizable, glfw.False)
-	window, err := glfw.CreateWindow(windowWidth, windowHeight, windowTitle, nil, nil)
-	if err != nil {
-		panic(err)
-	}
-
+func InitGL(window *glfw.Window) error {
 	window.MakeContextCurrent()
 	if err := gl.Init(); err != nil {
-		panic(err)
+		return err
 	}
 
 	// Set up orthographic projection
@@ -46,8 +30,7 @@ func initGraphics(windowTitle string) *glfw.Window {
 	gl.Ortho(0, width, height, 0, -1, 1) // Set coordinate system
 	gl.MatrixMode(gl.MODELVIEW)
 	gl.LoadIdentity()
-
-	return window
+	return nil
 }
 
 // SetPaletteColor sets a color in the palette.

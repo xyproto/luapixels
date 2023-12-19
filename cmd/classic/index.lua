@@ -23,7 +23,7 @@ right_pressed = false
 space_pressed = false
 
 function at_start()
-    print("hi")
+    print("Classic")
 end
 
 function at_every_tick()
