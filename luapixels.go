@@ -1,6 +1,7 @@
-package main
+package luapixels
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"runtime"
@@ -10,20 +11,32 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-const luaFilename = "index.lua"
-
 var shouldQuit = false
 
-func mainProgram() int {
+// Run is for running luapixel Lua code, given as a filename
+func Run(luaFilename string) error {
+	data, err := os.ReadFile(luaFilename)
+	if err != nil {
+		return err
+	}
+	return RunCode(string(data))
+}
+
+// RunCode is for running luapixel Lua code, given as a string
+func RunCode(luaCode string) error {
 	runtime.LockOSThread()
 
-	L := InitLua(luaFilename)
+	L := lua.NewState()
 	defer L.Close()
+
+	if err := L.DoString(luaCode); err != nil {
+		fmt.Fprintf(os.Stderr, "Error executing Lua code: %s\n", err)
+		return err
+	}
 
 	windowTitle, err := GetLuaGlobalString(L, "window_title")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s must declare a top level windowTitle variable\n", luaFilename)
-		return 1
+		return errors.New("Lua code must declare a top level windowTitle variable")
 	}
 
 	window := initGraphics(windowTitle)
@@ -60,12 +73,5 @@ func mainProgram() int {
 	}
 
 	CallLuaFunction(L, "at_end")
-
-	return 0
-}
-
-func main() {
-	if retVal := mainProgram(); retVal != 0 {
-		os.Exit(retVal)
-	}
+	return nil
 }
