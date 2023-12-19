@@ -46,12 +46,28 @@ func SetPaletteColor(index int, r, g, b int) {
 	palette[index] = [3]float32{float32(r) / 255, float32(g) / 255, float32(b) / 255}
 }
 
+// GetPaletteColor retrieves the r,g,b colors of a given palette index.
+func GetPaletteColor(index int) (int, int, int) {
+	color := palette[index]
+	fr, fg, fb := color[0], color[1], color[2]
+	return int(fr * 255.0), int(fg * 255.0), int(fb * 255.0)
+}
+
 // PlotPixel plots a pixel on the screen using a color from the palette.
 func PlotPixel(x, y, colorIndex int) {
 	gl.PointSize(5.0)
 	gl.Color3fv(&palette[colorIndex][0])
 	gl.Begin(gl.POINTS)
 	gl.Vertex2f(float32(x), float32(y))
+	gl.End()
+}
+
+// DrawLine draws a line on the screen using a color from the palette.
+func DrawLine(x1, y1, x2, y2, colorIndex int) {
+	gl.Color3fv(&palette[colorIndex][0])
+	gl.Begin(gl.LINES)
+	gl.Vertex2f(float32(x1), float32(y1))
+	gl.Vertex2f(float32(x2), float32(y2))
 	gl.End()
 }
 

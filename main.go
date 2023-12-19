@@ -1,30 +1,30 @@
 package main
 
 import (
-    "runtime"
+	"runtime"
 
-    "github.com/go-gl/glfw/v3.3/glfw"
+	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
 func main() {
-    runtime.LockOSThread()
+	runtime.LockOSThread()
 
-    window := initGraphics("Pixels!")
-    defer glfw.Terminate()
+	window := initGraphics("Pixels!")
+	defer glfw.Terminate()
 
-    L := InitLua("main.lua")
-    defer L.Close()
+	L := InitLua("main.lua")
+	defer L.Close()
 
-    CallLuaFunction(L, "atStart")
+	CallLuaFunction(L, "atStart")
 
-    for !window.ShouldClose() {
-        ClearScreen()
+	for !window.ShouldClose() {
+		ClearScreen()
 
 		CallLuaFunction(L, "everyFrame")
 
-        UpdateScreen(window)
-        glfw.PollEvents()
-    }
+		UpdateScreen(window)
+		glfw.PollEvents()
+	}
 
-    CallLuaFunction(L, "atEnd")
+	CallLuaFunction(L, "atEnd")
 }

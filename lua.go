@@ -37,6 +37,18 @@ func drawBackground(L *lua.LState) int {
 	return 0 // number of return values
 }
 
+// drawLine is a Go function to be called from Lua for drawing a line on the screen.
+func drawLine(L *lua.LState) int {
+	x1 := L.ToInt(1)
+	y1 := L.ToInt(2)
+	x2 := L.ToInt(3)
+	y2 := L.ToInt(4)
+	colorIndex := L.ToInt(5)
+	fmt.Printf("draw line color %d from (%d, %d) to (%d, %d)\n", colorIndex, x1, y1, x2, y2)
+	DrawLine(x1, y1, x2, y2, colorIndex)
+	return 0 // number of return values
+}
+
 // CallLuaFunction calls a Lua function by name.
 func CallLuaFunction(L *lua.LState, functionName string) {
 	L.CallByParam(lua.P{
@@ -50,9 +62,10 @@ func CallLuaFunction(L *lua.LState, functionName string) {
 func InitLua(luaFilename string) *lua.LState {
 	L := lua.NewState()
 
-	L.SetGlobal("setpalette", L.NewFunction(setPalette))
+	L.SetGlobal("setpal", L.NewFunction(setPalette))
 	L.SetGlobal("plot", L.NewFunction(plotPixel))
-	L.SetGlobal("drawBackground", L.NewFunction(drawBackground))
+	L.SetGlobal("background", L.NewFunction(drawBackground))
+	L.SetGlobal("line", L.NewFunction(drawLine))
 
 	if err := L.DoFile(luaFilename); err != nil {
 		panic(err)
