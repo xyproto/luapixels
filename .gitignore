@@ -11,9 +11,10 @@
 *.test
 *.tmp
 .DS_Store
+cmd/classic/classic
+cmd/doublejump/doublejump
+cmd/getpixel/getpixel
+cmd/simple/simple
 go.work
 include.txt
 output.txt
-cmd/simple/simple
-cmd/classic/classic
-cmd/doublejump/doublejump
