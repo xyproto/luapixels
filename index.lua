@@ -1,25 +1,26 @@
-windowTitle = "Pixel McPixelface"
+window_title = "Pixel McPixelface"
 
-function atStart()
-    -- Set palette color number 41 to red (255, 0, 0)
-    setpal(41, 255, 0, 0)
+function at_start()
+    print("hi")
 end
 
-function atEveryFrame()
-    background(0, 128, 255)
-    -- Fill the screen with color indexes from left to right
+function at_every_frame()
+   background(0, 128, 255)
     for y = 0, 199 do
         for x = 0, 255 do
             plot(x, y, x)
         end
         for x = 256, 318 do
-            plot(x, y, 28)
+            plot(x, y, 50)
         end
-        plot(319, y, 41)
+        plot(319, y, 70)
     end
+    plot(318, 198, 41)
+    plot(318, 199, 41)
+    plot(319, 198, 41)
+    plot(319, 199, 41)
 end
 
-function atEnd()
-    -- Print a friendly message to the console
+function at_end()
     print("bye!")
 end
