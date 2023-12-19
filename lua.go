@@ -55,6 +55,11 @@ func GetLuaGlobalString(L *lua.LState, variableName string) (string, error) {
 	return "", fmt.Errorf("global variable '%s' is not a string or doesn't exist", variableName)
 }
 
+func quit(L *lua.LState) int {
+	shouldQuit = true
+	return 0
+}
+
 // InitLua initializes the Lua VM, registers Go functions, and loads the given Lua filename
 func InitLua(luaFilename string) *lua.LState {
 	L := lua.NewState()
@@ -62,6 +67,7 @@ func InitLua(luaFilename string) *lua.LState {
 	L.SetGlobal("set_pal", L.NewFunction(setPalette))
 	L.SetGlobal("plot", L.NewFunction(plotPixel))
 	L.SetGlobal("background", L.NewFunction(drawBackground))
+	L.SetGlobal("quit", L.NewFunction(quit))
 
 	if err := L.DoFile(luaFilename); err != nil {
 		panic(err)

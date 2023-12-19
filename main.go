@@ -6,9 +6,12 @@ import (
 	"runtime"
 
 	"github.com/go-gl/glfw/v3.3/glfw"
+	lua "github.com/yuin/gopher-lua"
 )
 
 const luaFilename = "index.lua"
+
+var shouldQuit = false
 
 func mainProgram() int {
 	runtime.LockOSThread()
@@ -27,7 +30,14 @@ func mainProgram() int {
 
 	CallLuaFunction(L, "at_start")
 
-	for !window.ShouldClose() {
+	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+		if action == glfw.Press {
+			L.SetGlobal("last_key", lua.LNumber(key))
+			CallLuaFunction(L, "at_keypress")
+		}
+	})
+
+	for !window.ShouldClose() && !shouldQuit {
 		ClearScreen()
 
 		CallLuaFunction(L, "at_every_frame")
