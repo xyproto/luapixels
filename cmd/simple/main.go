@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	if err := luapixels.RunFile("index.lua"); err != nil {
+	if err := luapixels.RunFile("events.lua"); err != nil {
 		log.Fatalln(err)
 	}
 }
