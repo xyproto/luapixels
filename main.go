@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/go-gl/glfw/v3.3/glfw"
 	lua "github.com/yuin/gopher-lua"
@@ -28,16 +29,28 @@ func mainProgram() int {
 	window := initGraphics(windowTitle)
 	defer glfw.Terminate()
 
-	CallLuaFunction(L, "at_start")
-
 	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+		L.SetGlobal("last_key", lua.LNumber(key))
 		if action == glfw.Press {
-			L.SetGlobal("last_key", lua.LNumber(key))
 			CallLuaFunction(L, "at_keypress")
+		} else if action == glfw.Release {
+			CallLuaFunction(L, "at_keyrelease")
 		}
 	})
 
+	CallLuaFunction(L, "at_start")
+
+	tick := time.NewTicker(time.Millisecond * 16) // 60 ticks per second
+	defer tick.Stop()
+
 	for !window.ShouldClose() && !shouldQuit {
+		select {
+		case <-tick.C:
+			CallLuaFunction(L, "at_every_tick")
+		default:
+			// Non-blocking default case
+		}
+
 		ClearScreen()
 
 		CallLuaFunction(L, "at_every_frame")

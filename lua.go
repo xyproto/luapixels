@@ -55,7 +55,7 @@ func GetLuaGlobalString(L *lua.LState, variableName string) (string, error) {
 	return "", fmt.Errorf("global variable '%s' is not a string or doesn't exist", variableName)
 }
 
-func quit(L *lua.LState) int {
+func quit(_ *lua.LState) int {
 	shouldQuit = true
 	return 0
 }

@@ -61,14 +61,15 @@ func GetPaletteColor(index int) (int, int, int) {
 	return int(color.R), int(color.G), int(color.B)
 }
 
+// PlotPixel places a pixel with the given colorIndex
 func PlotPixel(x, y, colorIndex int) {
 	colorRGBA := palette[colorIndex].(color.RGBA)
 
 	// Calculate the coordinates for the quad's vertices
-	left := float32(x)
-	right := left + float32(scale)
-	top := float32(y)
-	bottom := top + float32(scale)
+	left := float32(x)                 //- 0.1
+	right := left + float32(scale)     //- 0.1
+	top := float32(y) - float32(scale) //- 0.1
+	bottom := top + float32(scale)     //- 0.1
 
 	// Set the OpenGL color
 	gl.Color3ub(uint8(colorRGBA.R), uint8(colorRGBA.G), uint8(colorRGBA.B))
