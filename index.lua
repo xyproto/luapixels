@@ -5,10 +5,18 @@ function atStart()
     setpal(41, 255, 0, 0)
 end
 
-function everyFrame()
+function atEveryFrame()
     background(0, 128, 255)
-    plot(0, 0, 41)
-    line(0, 0, 319, 199, 41)
+    -- Fill the screen with color indexes from left to right
+    for y = 0, 199 do
+        for x = 0, 255 do
+            plot(x, y, x)
+        end
+        for x = 256, 318 do
+            plot(x, y, 28)
+        end
+        plot(319, y, 41)
+    end
 end
 
 function atEnd()

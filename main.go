@@ -8,18 +8,18 @@ import (
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
+const luaFilename = "index.lua"
+
 func mainProgram() int {
 	// TODO: Is this needed with glfw?
 	runtime.LockOSThread()
-
-	const luaFilename = "index.lua"
 
 	L := InitLua(luaFilename)
 	defer L.Close()
 
 	windowTitle, err := GetLuaGlobalString(L, "windowTitle")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s must declare a windowTitle variable\n", luaFilename)
+		fmt.Fprintf(os.Stderr, "%s must declare a top level windowTitle variable\n", luaFilename)
 		return 1
 	}
 
@@ -31,7 +31,7 @@ func mainProgram() int {
 	for !window.ShouldClose() {
 		ClearScreen()
 
-		CallLuaFunction(L, "everyFrame")
+		CallLuaFunction(L, "atEveryFrame")
 
 		UpdateScreen(window)
 		glfw.PollEvents()

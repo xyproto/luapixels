@@ -12,7 +12,7 @@ func setPalette(L *lua.LState) int {
 	r := L.ToInt(2)
 	g := L.ToInt(3)
 	b := L.ToInt(4)
-	fmt.Printf("set color %d to (%d, %d, %d)\n", index, r, g, b)
+	//fmt.Printf("set color %d to (%d, %d, %d)\n", index, r, g, b)
 	SetPaletteColor(index, r, g, b)
 	return 0 // number of return values
 }
@@ -22,7 +22,7 @@ func plotPixel(L *lua.LState) int {
 	x := L.ToInt(1)
 	y := L.ToInt(2)
 	colorIndex := L.ToInt(3)
-	fmt.Printf("plot pixel color %d at (%d, %d)\n", colorIndex, x, y)
+	//fmt.Printf("plot pixel color %d at (%d, %d)\n", colorIndex, x, y)
 	PlotPixel(x, y, colorIndex)
 	return 0 // number of return values
 }
@@ -32,20 +32,8 @@ func drawBackground(L *lua.LState) int {
 	r := L.ToInt(1)
 	g := L.ToInt(2)
 	b := L.ToInt(3)
-	fmt.Printf("draw background (%d, %d, %d)\n", r, g, b)
+	//fmt.Printf("draw background (%d, %d, %d)\n", r, g, b)
 	DrawBackground(r, g, b)
-	return 0 // number of return values
-}
-
-// drawLine is a Go function to be called from Lua for drawing a line on the screen.
-func drawLine(L *lua.LState) int {
-	x1 := L.ToInt(1)
-	y1 := L.ToInt(2)
-	x2 := L.ToInt(3)
-	y2 := L.ToInt(4)
-	colorIndex := L.ToInt(5)
-	fmt.Printf("draw line color %d from (%d, %d) to (%d, %d)\n", colorIndex, x1, y1, x2, y2)
-	DrawLine(x1, y1, x2, y2, colorIndex)
 	return 0 // number of return values
 }
 
@@ -74,7 +62,6 @@ func InitLua(luaFilename string) *lua.LState {
 	L.SetGlobal("setpal", L.NewFunction(setPalette))
 	L.SetGlobal("plot", L.NewFunction(plotPixel))
 	L.SetGlobal("background", L.NewFunction(drawBackground))
-	L.SetGlobal("line", L.NewFunction(drawLine))
 
 	if err := L.DoFile(luaFilename); err != nil {
 		panic(err)
