@@ -10,6 +10,7 @@
 *.swp
 *.test
 *.tmp
+.DS_Store
 go.work
 include.txt
 luapixels
