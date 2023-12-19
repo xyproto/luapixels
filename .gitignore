@@ -13,5 +13,7 @@
 .DS_Store
 go.work
 include.txt
-luapixels
 output.txt
+cmd/simple/simple
+cmd/classic/classic
+cmd/doublejump/doublejump
