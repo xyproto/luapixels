@@ -6,6 +6,8 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
+var blacklist []string
+
 // setPalette is a Go function to be called from Lua for setting a color in the palette.
 func setPalette(L *lua.LState) int {
 	colorIndex := byte(L.ToInt(1))
@@ -42,13 +44,24 @@ func drawBackground(L *lua.LState) int {
 	return 0 // number of return values
 }
 
+func quit(_ *lua.LState) int {
+	shouldQuit = true
+	return 0 // number of return values
+}
+
 // CallLuaFunction calls a Lua function by name.
-func CallLuaFunction(L *lua.LState, functionName string) {
-	L.CallByParam(lua.P{
-		Fn:      L.GetGlobal(functionName),
+func CallLuaFunction(L *lua.LState, funcName string) {
+	if hasS(blacklist, funcName) {
+		return
+	}
+	if err := L.CallByParam(lua.P{
+		Fn:      L.GetGlobal(funcName),
 		NRet:    0,
 		Protect: true,
-	})
+	}); err != nil {
+		//fmt.Fprintf(os.Stderr, "could not call %s: %v", funcName, err)
+		blacklist = append(blacklist, funcName)
+	}
 }
 
 // GetLuaGlobalString fetches the value of a global Lua variable as a string.
@@ -60,7 +73,26 @@ func GetLuaGlobalString(L *lua.LState, variableName string) (string, error) {
 	return "", fmt.Errorf("global variable '%s' is not a string or doesn't exist", variableName)
 }
 
-func quit(_ *lua.LState) int {
-	shouldQuit = true
-	return 0 // number of return values
+func CallLuaFunctionWithDirection(L *lua.LState, funcName string, x, y int) {
+	if hasS(blacklist, funcName) {
+		return
+	}
+	fn := L.GetGlobal(funcName) // Get the function reference
+	if err := L.CallByParam(lua.P{
+		Fn:      fn,
+		NRet:    0, // Number of expected return values
+		Protect: true,
+	}, lua.LNumber(x), lua.LNumber(y)); err != nil {
+		//fmt.Fprintf(os.Stderr, "could not call %s: %v", funcName, err)
+		blacklist = append(blacklist, funcName)
+	}
+}
+
+func hasS(xs []string, x string) bool {
+	for _, e := range xs {
+		if e == x {
+			return true
+		}
+	}
+	return false
 }

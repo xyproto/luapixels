@@ -59,10 +59,59 @@ func Run(luaCode string) error {
 
 	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		L.SetGlobal("last_key", lua.LNumber(key))
-		if action == glfw.Press {
-			CallLuaFunction(L, "at_keypress")
-		} else if action == glfw.Release {
-			CallLuaFunction(L, "at_keyrelease")
+		pressed := action == glfw.Press
+		released := action == glfw.Release
+		if pressed || released {
+			switch key {
+			case glfw.KeyUp, glfw.KeyW:
+				if pressed {
+					CallLuaFunction(L, "at_up_pressed")
+				} else {
+					CallLuaFunction(L, "at_up_released")
+				}
+			case glfw.KeyDown, glfw.KeyS:
+				if pressed {
+					CallLuaFunction(L, "at_down_pressed")
+				} else {
+					CallLuaFunction(L, "at_down_released")
+				}
+			case glfw.KeyLeft, glfw.KeyA:
+				if pressed {
+					CallLuaFunction(L, "at_left_pressed")
+				} else {
+					CallLuaFunction(L, "at_left_released")
+				}
+			case glfw.KeyRight, glfw.KeyD:
+				if pressed {
+					CallLuaFunction(L, "at_right_pressed")
+				} else {
+					CallLuaFunction(L, "at_right_released")
+				}
+			case glfw.KeySpace:
+				if pressed {
+					CallLuaFunction(L, "at_space_pressed")
+				} else {
+					CallLuaFunction(L, "at_space_released")
+				}
+			case glfw.KeyEnter:
+				if pressed {
+					CallLuaFunction(L, "at_enter_pressed")
+				} else {
+					CallLuaFunction(L, "at_enter_released")
+				}
+			case glfw.KeyEscape:
+				if pressed {
+					CallLuaFunction(L, "at_esc_pressed")
+				} else {
+					CallLuaFunction(L, "at_esc_released")
+				}
+			default:
+				if pressed {
+					CallLuaFunction(L, "at_key_pressed")
+				} else {
+					CallLuaFunction(L, "at_key_released")
+				}
+			}
 		}
 	})
 

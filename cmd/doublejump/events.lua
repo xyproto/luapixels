@@ -103,45 +103,34 @@ function at_every_frame()
     plot(player_x, player_y, 41)
 end
 
+function at_direction_pressed(x, y)
+    if x == -1 then left_pressed = true end
+    if x == 1 then right_pressed = true end
+    if y == -1 then down_pressed = true end
+    if y == 1 then up_pressed = true end
+end
+
+function at_direction_released(x, y)
+    if x == -1 then left_pressed = false end
+    if x == 1 then right_pressed = false end
+    if y == -1 then down_pressed = false end
+    if y == 1 then up_pressed = false end
+end
+
 function at_keypress()
     local key = last_key
     -- Quit if GLFW key codes 81 ('q') or 256 ('Esc') are pressed
     if key == 81 or key == 256 then
         quit()
     end
-    -- Adjust cursor position based on arrow keys or WASD
-    -- GLFW key codes: 87 ('W'), 65 ('A'), 83 ('S'), 68 ('D')
-    -- Arrow keys: 262 (Right), 263 (Left), 264 (Down), 265 (Up)
-    if key == 87 or key == 265 then
-        up_pressed = true
-    elseif key == 83 or key == 264 then
-        down_pressed = true
-    elseif key == 65 or key == 263 then
-        left_pressed = true
-    elseif key == 68 or key == 262 then
-        right_pressed = true
-    elseif key == 32 then
-        space_pressed = true
-    end
-
+    -- Jump logic
+    if key == 32 then space_pressed = true end
 end
 
 function at_keyrelease()
     local key = last_key
-    -- Adjust cursor position based on arrow keys or WASD
-    -- GLFW key codes: 87 ('W'), 65 ('A'), 83 ('S'), 68 ('D')
-    -- Arrow keys: 262 (Right), 263 (Left), 264 (Down), 265 (Up)
-    if key == 87 or key == 265 then
-        up_pressed = false
-    elseif key == 83 or key == 264 then
-        down_pressed = false
-    elseif key == 65 or key == 263 then
-        left_pressed = false
-    elseif key == 68 or key == 262 then
-        right_pressed = false
-    elseif key == 32 then
-        space_pressed = false
-    end
+    -- Disable jump on key release
+    if key == 32 then space_pressed = false end
 end
 
 function at_end()

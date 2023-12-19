@@ -4,8 +4,6 @@ The beginnings of what could be a game engine for using GLFW + Go + Lua.
 
 ![events.lua + results](img/screenshot.png)
 
-The pixels are quads right now, but a texture could be used instead.
-
 ### Example use
 
 main.go:
@@ -52,6 +50,12 @@ function at_end()
     print("bye!")
 end
 ```
+
+### Performance
+
+There is a lot of room for improvements when it comes to performance, since this implementation is fresh and not yet optimized.
+
+The pixels are quads right now, but a texture could be used instead. This would require no changes from the Lua code, though.
 
 ### General info
 
