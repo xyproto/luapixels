@@ -42,7 +42,7 @@ func Run(luaCode string) error {
 	L := lua.NewState()
 	defer L.Close()
 
-	L.SetGlobal("set_pal", L.NewFunction(setPalette))
+	L.SetGlobal("setpal", L.NewFunction(setPalette))
 	L.SetGlobal("plot", L.NewFunction(plotPixel))
 	L.SetGlobal("background", L.NewFunction(drawBackground))
 	L.SetGlobal("quit", L.NewFunction(quit))
