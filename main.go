@@ -11,13 +11,12 @@ import (
 const luaFilename = "index.lua"
 
 func mainProgram() int {
-	// TODO: Is this needed with glfw?
 	runtime.LockOSThread()
 
 	L := InitLua(luaFilename)
 	defer L.Close()
 
-	windowTitle, err := GetLuaGlobalString(L, "windowTitle")
+	windowTitle, err := GetLuaGlobalString(L, "window_title")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s must declare a top level windowTitle variable\n", luaFilename)
 		return 1
@@ -26,18 +25,18 @@ func mainProgram() int {
 	window := initGraphics(windowTitle)
 	defer glfw.Terminate()
 
-	CallLuaFunction(L, "atStart")
+	CallLuaFunction(L, "at_start")
 
 	for !window.ShouldClose() {
 		ClearScreen()
 
-		CallLuaFunction(L, "atEveryFrame")
+		CallLuaFunction(L, "at_every_frame")
 
 		UpdateScreen(window)
 		glfw.PollEvents()
 	}
 
-	CallLuaFunction(L, "atEnd")
+	CallLuaFunction(L, "at_end")
 
 	return 0
 }

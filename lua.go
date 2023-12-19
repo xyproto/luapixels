@@ -59,7 +59,7 @@ func GetLuaGlobalString(L *lua.LState, variableName string) (string, error) {
 func InitLua(luaFilename string) *lua.LState {
 	L := lua.NewState()
 
-	L.SetGlobal("setpal", L.NewFunction(setPalette))
+	L.SetGlobal("set_pal", L.NewFunction(setPalette))
 	L.SetGlobal("plot", L.NewFunction(plotPixel))
 	L.SetGlobal("background", L.NewFunction(drawBackground))
 
