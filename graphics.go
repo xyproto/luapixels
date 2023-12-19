@@ -3,9 +3,9 @@ package main
 import (
 	"image/color"
 
+	"github.com/fzipp/vga"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
-	"github.com/fzipp/vga"
 )
 
 const (
@@ -23,7 +23,6 @@ var (
 
 // Initialize GLFW and OpenGL
 func initGraphics(windowTitle string) *glfw.Window {
-	//palette = make([]color.Color, paletteSize)
 	palette = vga.DefaultPalette
 
 	if err := glfw.Init(); err != nil {
@@ -65,14 +64,11 @@ func GetPaletteColor(index int) (int, int, int) {
 func PlotPixel(x, y, colorIndex int) {
 	colorRGBA := palette[colorIndex].(color.RGBA)
 
-	//pixelWidth := scale
-	//pixelHeight := scale
-
-	// Adjusted coordinates for the quad's vertices
-	left := float32(x * scale)
-	right := float32((x + 1) * scale)
-	top := float32(y * scale)
-	bottom := float32((y + 1) * scale)
+	// Calculate the coordinates for the quad's vertices
+	left := float32(x)
+	right := left + float32(scale)
+	top := float32(y)
+	bottom := top + float32(scale)
 
 	// Set the OpenGL color
 	gl.Color3ub(uint8(colorRGBA.R), uint8(colorRGBA.G), uint8(colorRGBA.B))
@@ -98,7 +94,6 @@ func ClearScreen() {
 
 // DrawBackground sets the entire background to a specified color
 func DrawBackground(r, g, b int) {
-	// Normalize color components to be between 0 and 1
 	gl.ClearColor(float32(r)/255.0, float32(g)/255.0, float32(b)/255.0, 1.0)
 	gl.Clear(gl.COLOR_BUFFER_BIT)
 }
