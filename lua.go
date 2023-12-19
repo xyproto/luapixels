@@ -58,6 +58,15 @@ func CallLuaFunction(L *lua.LState, functionName string) {
 	})
 }
 
+// GetLuaGlobalString fetches the value of a global Lua variable as a string.
+func GetLuaGlobalString(L *lua.LState, variableName string) (string, error) {
+	global := L.GetGlobal(variableName)
+	if global.Type() == lua.LTString {
+		return global.String(), nil
+	}
+	return "", fmt.Errorf("global variable '%s' is not a string or doesn't exist", variableName)
+}
+
 // InitLua initializes the Lua VM, registers Go functions, and loads the given Lua filename
 func InitLua(luaFilename string) *lua.LState {
 	L := lua.NewState()

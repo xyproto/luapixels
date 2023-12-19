@@ -1,3 +1,5 @@
+windowTitle = "Pixel McPixelface"
+
 function atStart()
     -- Set palette color number 41 to red (255, 0, 0)
     setpal(41, 255, 0, 0)
