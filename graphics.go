@@ -3,6 +3,7 @@ package luapixels
 import (
 	"image/color"
 
+	"github.com/fzipp/vga"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
@@ -16,7 +17,16 @@ const (
 	paletteSize  = 256
 )
 
-var palette []color.Color
+type PixelSlice [width * height]byte
+
+var (
+	palette []color.Color
+	pixels  PixelSlice
+)
+
+func init() {
+	palette = vga.DefaultPalette
+}
 
 func InitGL(window *glfw.Window) error {
 	window.MakeContextCurrent()
@@ -34,18 +44,23 @@ func InitGL(window *glfw.Window) error {
 }
 
 // SetPaletteColor sets a color in the palette.
-func SetPaletteColor(index int, r, g, b int) {
-	palette[index] = color.RGBA{uint8(r), uint8(g), uint8(b), 255}
+func SetPaletteColor(colorIndex, r, g, b byte) {
+	palette[colorIndex] = color.RGBA{r, g, b, 0xff}
 }
 
 // GetPaletteColor retrieves the r,g,b colors of a given palette index.
-func GetPaletteColor(index int) (int, int, int) {
-	color := palette[index].(color.RGBA)
-	return int(color.R), int(color.G), int(color.B)
+func GetPaletteColor(colorIndex byte) (byte, byte, byte) {
+	color := palette[colorIndex].(color.RGBA)
+	return byte(color.R), byte(color.G), byte(color.B)
 }
 
-// PlotPixel places a pixel with the given colorIndex
-func PlotPixel(x, y, colorIndex int) {
+// glSetColor will set the current OpenGL color
+func GLSetColor(c color.RGBA) {
+	gl.Color3ub(byte(c.R), byte(c.G), byte(c.B))
+}
+
+// PutPixel places a pixel with the given colorIndex
+func PutPixel(x, y int, colorIndex byte) {
 	colorRGBA := palette[colorIndex].(color.RGBA)
 
 	// Calculate the coordinates for the quad's vertices
@@ -55,7 +70,7 @@ func PlotPixel(x, y, colorIndex int) {
 	bottom := top + float32(scale)
 
 	// Set the OpenGL color
-	gl.Color3ub(uint8(colorRGBA.R), uint8(colorRGBA.G), uint8(colorRGBA.B))
+	GLSetColor(colorRGBA)
 
 	// Draw a quad at the specified position
 	gl.Begin(gl.QUADS)
@@ -64,6 +79,13 @@ func PlotPixel(x, y, colorIndex int) {
 	gl.Vertex2f(right, bottom)
 	gl.Vertex2f(left, bottom)
 	gl.End()
+
+	pixels[width*y+x] = colorIndex
+}
+
+// GetPixel returns the color index of the given (x,y) position
+func GetPixel(x, y int) byte {
+	return pixels[width*y+x]
 }
 
 // UpdateScreen swaps the buffers and displays the rendered frame.
@@ -77,7 +99,7 @@ func ClearScreen() {
 }
 
 // DrawBackground sets the entire background to a specified color
-func DrawBackground(r, g, b int) {
+func DrawBackground(r, g, b byte) {
 	gl.ClearColor(float32(r)/255.0, float32(g)/255.0, float32(b)/255.0, 1.0)
 	gl.Clear(gl.COLOR_BUFFER_BIT)
 }

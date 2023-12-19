@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fzipp/vga"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	lua "github.com/yuin/gopher-lua"
 )
@@ -37,13 +36,12 @@ func Run(luaCode string) error {
 		return err
 	}
 
-	palette = vga.DefaultPalette
-
 	L := lua.NewState()
 	defer L.Close()
 
 	L.SetGlobal("setpal", L.NewFunction(setPalette))
-	L.SetGlobal("plot", L.NewFunction(plotPixel))
+	L.SetGlobal("plot", L.NewFunction(putPixel))
+	L.SetGlobal("getpixel", L.NewFunction(getPixel))
 	L.SetGlobal("background", L.NewFunction(drawBackground))
 	L.SetGlobal("quit", L.NewFunction(quit))
 
