@@ -1,5 +1,7 @@
 github.com/fzipp/vga v1.0.0 h1:XE6UuPzvWLCVsVMAAMDyAo4/17UoAsJmngROtCCi/FA=
 github.com/fzipp/vga v1.0.0/go.mod h1:PdZJ0vKCNZNZoPlDX0QHY8KNo/BlvHFqeB1cflg5q/o=
+github.com/gen2brain/malgo v0.11.10 h1:u41QchDBS7Z2rwEVPu7uycK6HA8IyzKoUOhLU7IvYW4=
+github.com/gen2brain/malgo v0.11.10/go.mod h1:f9TtuN7DVrXMiV/yIceMeWpvanyVzJQMlBecJFVMxww=
 github.com/go-gl/gl v0.0.0-20231021071112-07e5d0ea2e71 h1:5BVwOaUSBTlVZowGO6VZGw2H/zl9nrd3eCZfYV+NfQA=
 github.com/go-gl/gl v0.0.0-20231021071112-07e5d0ea2e71/go.mod h1:9YTyiznxEY1fVinfM7RvRcjRHbw2xLBJ3AAGIT0I4Nw=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20231124074035-2de0cf0c80af h1:zclgNFqP+NXDgGX2BiDvIonxKIom8j65wQlOyFtyujc=
