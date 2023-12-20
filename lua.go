@@ -3,6 +3,7 @@ package luapixels
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	lua "github.com/yuin/gopher-lua"
 )
@@ -48,6 +49,22 @@ func drawBackground(L *lua.LState) int {
 func quit(_ *lua.LState) int {
 	shouldQuit = true
 	return 0 // number of return values
+}
+
+// Lua binding for PlaySound
+func playSound(L *lua.LState) int {
+	frequency := L.ToNumber(1)
+	duration := L.ToInt(2)
+	PlaySound(float32(frequency), duration)
+	return 0
+}
+
+func sleep(L *lua.LState) int {
+	// Extract the correct number of nanoseconds
+	duration := time.Duration(float64(L.ToNumber(1)) * 1000000000.0)
+	// Wait and block the current thread of execution.
+	time.Sleep(duration)
+	return 0
 }
 
 // GetLuaGlobalString fetches the value of a global Lua variable as a string.

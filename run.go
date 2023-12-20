@@ -33,8 +33,14 @@ func Run(luaCode string) error {
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 
 	if err := InitGL(window); err != nil {
-		return err
+		return fmt.Errorf("failed to initialize OpenGL: %v", err)
 	}
+
+	if err := InitAudio(); err != nil {
+		return fmt.Errorf("failed to initialize audio: %v", err)
+	}
+
+	defer context.Free()
 
 	L := lua.NewState()
 	defer L.Close()
@@ -44,6 +50,8 @@ func Run(luaCode string) error {
 	L.SetGlobal("getpixel", L.NewFunction(getPixel))
 	L.SetGlobal("background", L.NewFunction(drawBackground))
 	L.SetGlobal("quit", L.NewFunction(quit))
+	L.SetGlobal("playsound", L.NewFunction(playSound))
+	L.SetGlobal("sleep", L.NewFunction(sleep))
 
 	if err := L.DoString(strings.TrimSpace(luaCode)); err != nil {
 		fmt.Fprintf(os.Stderr, "Error executing Lua code: %s\n", err)
@@ -56,6 +64,10 @@ func Run(luaCode string) error {
 	}
 
 	window.SetTitle(windowTitle)
+
+	window.SetFramebufferSizeCallback(func(w *glfw.Window, width int, height int) {
+		updateViewportAndProjection(w)
+	})
 
 	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		L.SetGlobal("last_key", lua.LNumber(key))
