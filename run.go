@@ -73,7 +73,6 @@ func Run(luaCode string) error {
 						CallLuaFunction(L, "at_key_released")
 					}
 				}
-
 			case glfw.KeyDown, glfw.KeyS:
 				if pressed {
 					if err := CallLuaFunction(L, "at_down_pressed"); err != nil {
@@ -84,7 +83,6 @@ func Run(luaCode string) error {
 						CallLuaFunction(L, "at_key_released")
 					}
 				}
-
 			case glfw.KeyLeft, glfw.KeyA:
 				if pressed {
 					if err := CallLuaFunction(L, "at_left_pressed"); err != nil {
@@ -105,7 +103,6 @@ func Run(luaCode string) error {
 						CallLuaFunction(L, "at_key_released")
 					}
 				}
-
 			case glfw.KeySpace:
 				if pressed {
 					if err := CallLuaFunction(L, "at_space_pressed"); err != nil {
