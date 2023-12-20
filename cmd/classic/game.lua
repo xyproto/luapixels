@@ -94,7 +94,7 @@ function at_every_frame()
     plot(player_x, player_y, 41)
 end
 
-function at_keypress()
+function at_key_pressed()
     local key = last_key
     -- Quit if GLFW key codes 81 ('q') or 256 ('Esc') are pressed
     if key == 81 or key == 256 then
@@ -117,7 +117,7 @@ function at_keypress()
 
 end
 
-function at_keyrelease()
+function at_key_released()
     local key = last_key
     -- Adjust cursor position based on arrow keys or WASD
     -- GLFW key codes: 87 ('W'), 65 ('A'), 83 ('S'), 68 ('D')

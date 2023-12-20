@@ -12,7 +12,7 @@
 *.tmp
 .DS_Store
 cmd/classic/classic
-cmd/doublejump/doublejump
+cmd/multijump/multijump
 cmd/getpixel/getpixel
 cmd/simple/simple
 go.work
