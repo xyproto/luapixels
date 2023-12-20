@@ -1,6 +1,7 @@
 package luapixels
 
 import (
+	"errors"
 	"fmt"
 
 	lua "github.com/yuin/gopher-lua"
@@ -49,21 +50,6 @@ func quit(_ *lua.LState) int {
 	return 0 // number of return values
 }
 
-// CallLuaFunction calls a Lua function by name.
-func CallLuaFunction(L *lua.LState, funcName string) {
-	if hasS(blacklist, funcName) {
-		return
-	}
-	if err := L.CallByParam(lua.P{
-		Fn:      L.GetGlobal(funcName),
-		NRet:    0,
-		Protect: true,
-	}); err != nil {
-		//fmt.Fprintf(os.Stderr, "could not call %s: %v", funcName, err)
-		blacklist = append(blacklist, funcName)
-	}
-}
-
 // GetLuaGlobalString fetches the value of a global Lua variable as a string.
 func GetLuaGlobalString(L *lua.LState, variableName string) (string, error) {
 	global := L.GetGlobal(variableName)
@@ -73,21 +59,23 @@ func GetLuaGlobalString(L *lua.LState, variableName string) (string, error) {
 	return "", fmt.Errorf("global variable '%s' is not a string or doesn't exist", variableName)
 }
 
-func CallLuaFunctionWithDirection(L *lua.LState, funcName string, x, y int) {
+// CallLuaFunction calls a Lua function by name.
+func CallLuaFunction(L *lua.LState, funcName string) error {
 	if hasS(blacklist, funcName) {
-		return
+		return errors.New("no such function: " + funcName)
 	}
-	fn := L.GetGlobal(funcName) // Get the function reference
 	if err := L.CallByParam(lua.P{
-		Fn:      fn,
-		NRet:    0, // Number of expected return values
+		Fn:      L.GetGlobal(funcName),
+		NRet:    0,
 		Protect: true,
-	}, lua.LNumber(x), lua.LNumber(y)); err != nil {
-		//fmt.Fprintf(os.Stderr, "could not call %s: %v", funcName, err)
+	}); err != nil {
 		blacklist = append(blacklist, funcName)
+		return err
 	}
+	return nil
 }
 
+// hasS checks if a slice of strings contains the given string
 func hasS(xs []string, x string) bool {
 	for _, e := range xs {
 		if e == x {

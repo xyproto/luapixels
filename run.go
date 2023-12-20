@@ -65,45 +65,76 @@ func Run(luaCode string) error {
 			switch key {
 			case glfw.KeyUp, glfw.KeyW:
 				if pressed {
-					CallLuaFunction(L, "at_up_pressed")
+					if err := CallLuaFunction(L, "at_up_pressed"); err != nil {
+						CallLuaFunction(L, "at_key_pressed")
+					}
 				} else {
-					CallLuaFunction(L, "at_up_released")
+					if err := CallLuaFunction(L, "at_up_released"); err != nil {
+						CallLuaFunction(L, "at_key_released")
+					}
 				}
+
 			case glfw.KeyDown, glfw.KeyS:
 				if pressed {
-					CallLuaFunction(L, "at_down_pressed")
+					if err := CallLuaFunction(L, "at_down_pressed"); err != nil {
+						CallLuaFunction(L, "at_key_pressed")
+					}
 				} else {
-					CallLuaFunction(L, "at_down_released")
+					if err := CallLuaFunction(L, "at_down_released"); err != nil {
+						CallLuaFunction(L, "at_key_released")
+					}
 				}
+
 			case glfw.KeyLeft, glfw.KeyA:
 				if pressed {
-					CallLuaFunction(L, "at_left_pressed")
+					if err := CallLuaFunction(L, "at_left_pressed"); err != nil {
+						CallLuaFunction(L, "at_key_pressed")
+					}
 				} else {
-					CallLuaFunction(L, "at_left_released")
+					if err := CallLuaFunction(L, "at_left_released"); err != nil {
+						CallLuaFunction(L, "at_key_released")
+					}
 				}
 			case glfw.KeyRight, glfw.KeyD:
 				if pressed {
-					CallLuaFunction(L, "at_right_pressed")
+					if err := CallLuaFunction(L, "at_right_pressed"); err != nil {
+						CallLuaFunction(L, "at_key_pressed")
+					}
 				} else {
-					CallLuaFunction(L, "at_right_released")
+					if err := CallLuaFunction(L, "at_right_released"); err != nil {
+						CallLuaFunction(L, "at_key_released")
+					}
 				}
+
 			case glfw.KeySpace:
 				if pressed {
-					CallLuaFunction(L, "at_space_pressed")
+					if err := CallLuaFunction(L, "at_space_pressed"); err != nil {
+						CallLuaFunction(L, "at_key_pressed")
+					}
 				} else {
-					CallLuaFunction(L, "at_space_released")
+					if err := CallLuaFunction(L, "at_space_released"); err != nil {
+						CallLuaFunction(L, "at_key_released")
+					}
 				}
 			case glfw.KeyEnter:
 				if pressed {
-					CallLuaFunction(L, "at_enter_pressed")
+					if err := CallLuaFunction(L, "at_enter_pressed"); err != nil {
+						CallLuaFunction(L, "at_key_pressed")
+					}
 				} else {
-					CallLuaFunction(L, "at_enter_released")
+					if err := CallLuaFunction(L, "at_enter_released"); err != nil {
+						CallLuaFunction(L, "at_key_released")
+					}
 				}
 			case glfw.KeyEscape:
 				if pressed {
-					CallLuaFunction(L, "at_esc_pressed")
+					if err := CallLuaFunction(L, "at_esc_pressed"); err != nil {
+						CallLuaFunction(L, "at_key_pressed")
+					}
 				} else {
-					CallLuaFunction(L, "at_esc_released")
+					if err := CallLuaFunction(L, "at_esc_released"); err != nil {
+						CallLuaFunction(L, "at_key_released")
+					}
 				}
 			default:
 				if pressed {
