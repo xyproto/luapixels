@@ -8,7 +8,7 @@ import (
 	"github.com/xyproto/luapixels"
 )
 
-//go:embed events.lua
+//go:embed game.lua
 var luaCode string
 
 func main() {

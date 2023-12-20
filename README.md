@@ -2,7 +2,7 @@
 
 The beginnings of what could be a game engine for using GLFW + Go + Lua.
 
-![events.lua + results](img/screenshot.png)
+![game.lua + results](img/screenshot.png)
 
 ### Example use
 
@@ -18,13 +18,13 @@ import (
 )
 
 func main() {
-    if err := luapixels.RunFile("events.lua"); err != nil {
+    if err := luapixels.RunFile("game.lua"); err != nil {
         log.Fatalln(err)
     }
 }
 ```
 
-events.lua:
+game.lua:
 
 ```lua
 window_title = "Simple Example"
