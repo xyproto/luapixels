@@ -34,13 +34,26 @@ func InitGL(window *glfw.Window) error {
 		return err
 	}
 
-	// Set up orthographic projection
+	// Set initial viewport and projection
+	updateViewportAndProjection(window)
+
+	return nil
+}
+
+func updateViewportAndProjection(window *glfw.Window) {
+	winWidth, winHeight := window.GetSize()
+	// Calculate the new viewport to keep the content centered
+	viewportWidth := scale * width
+	viewportHeight := scale * height
+	viewportX := (winWidth - viewportWidth) / 2
+	viewportY := (winHeight - viewportHeight) / 2
+
+	gl.Viewport(int32(viewportX), int32(viewportY), int32(viewportWidth), int32(viewportHeight))
 	gl.MatrixMode(gl.PROJECTION)
 	gl.LoadIdentity()
-	gl.Ortho(0, width, height, 0, -1, 1) // Set coordinate system
+	gl.Ortho(0, width, height, 0, -1, 1)
 	gl.MatrixMode(gl.MODELVIEW)
 	gl.LoadIdentity()
-	return nil
 }
 
 // SetPaletteColor sets a color in the palette.
